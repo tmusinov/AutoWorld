@@ -14,7 +14,7 @@ namespace AutoWorld.Services
     using AngleSharp;
     using AutoWorld.Services.Models;
 
-    public class CarsScraperService : ICarsScraperService
+    public class CarsScraperService : ICarsScrapperService
     {
         private static readonly string EmptyString = string.Empty;
 
