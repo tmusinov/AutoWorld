@@ -9,6 +9,7 @@
     using AutoWorld.Data.Models;
     using AutoWorld.Services.Mapping;
     using AutoWorld.Web.ViewModels.Cars;
+    using AutoWorld.Web.ViewModels.Home;
 
     public class CarsService : ICarsService
     {
@@ -70,6 +71,20 @@
         public IEnumerable<T> GetAll<T>()
         {
             IQueryable<Car> query = this.carRepository.All();
+
+            return query.To<T>().ToList();
+        }
+
+        public IEnumerable<T> SearchCars<T>(CarsSearchInputModel car)
+        {
+            IQueryable<Car> query = this.carRepository.AllAsNoTracking()
+                .Where(x =>
+                x.Make.Name == car.Make &&
+                x.Model.Name == car.Model &&
+                x.Price <= car.Price &&
+                x.EngineType == car.EngineType &&
+                x.Gearbox == car.Gearbox &&
+                x.Year.Contains(car.Year.ToString()));
 
             return query.To<T>().ToList();
         }
