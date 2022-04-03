@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AutoWorld.Services
+﻿namespace AutoWorld.Services
 {
     using System;
     using System.Collections.Concurrent;
@@ -14,14 +8,14 @@ namespace AutoWorld.Services
     using AngleSharp;
     using AutoWorld.Services.Models;
 
-    public class CarsScraperService : ICarsScrapperService
+    public class CarsScrapperService : ICarsScrapperService
     {
         private static readonly string EmptyString = string.Empty;
 
         private readonly IConfiguration config;
         private readonly IBrowsingContext context;
 
-        public CarsScraperService()
+        public CarsScrapperService()
         {
             this.config = Configuration.Default.WithDefaultLoader();
             this.context = BrowsingContext.New(this.config);
