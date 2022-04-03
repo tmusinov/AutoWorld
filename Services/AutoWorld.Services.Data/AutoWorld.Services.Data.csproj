@@ -21,6 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\AutoWorld.Data.Common\AutoWorld.Data.Common.csproj" />
     <ProjectReference Include="..\..\Data\AutoWorld.Data.Models\AutoWorld.Data.Models.csproj" />
+	  <ProjectReference Include="..\..\Web\AutoWorld.Web.ViewModels\AutoWorld.Web.ViewModels.csproj" />
     <ProjectReference Include="..\AutoWorld.Services.Mapping\AutoWorld.Services.Mapping.csproj" />
   </ItemGroup>
 
