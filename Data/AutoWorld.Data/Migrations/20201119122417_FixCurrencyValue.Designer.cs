@@ -4,14 +4,16 @@ using AutoWorld.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace AutoWorld.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201119122417_FixCurrencyValue")]
+    partial class FixCurrencyValue
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -237,28 +239,6 @@ namespace AutoWorld.Data.Migrations
                     b.ToTable("Cars");
                 });
 
-            modelBuilder.Entity("AutoWorld.Data.Models.CarsExtras", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CarId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ExtraId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CarId");
-
-                    b.HasIndex("ExtraId");
-
-                    b.ToTable("CarsExtras");
-                });
-
             modelBuilder.Entity("AutoWorld.Data.Models.Color", b =>
                 {
                     b.Property<int>("Id")
@@ -341,6 +321,9 @@ namespace AutoWorld.Data.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int?>("CarId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
@@ -357,6 +340,8 @@ namespace AutoWorld.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CarId");
 
                     b.HasIndex("IsDeleted");
 
@@ -659,21 +644,6 @@ namespace AutoWorld.Data.Migrations
                         .HasForeignKey("WatchlistId");
                 });
 
-            modelBuilder.Entity("AutoWorld.Data.Models.CarsExtras", b =>
-                {
-                    b.HasOne("AutoWorld.Data.Models.Car", "Car")
-                        .WithMany("Extras")
-                        .HasForeignKey("CarId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AutoWorld.Data.Models.Extra", "Extra")
-                        .WithMany("CarsExtras")
-                        .HasForeignKey("ExtraId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("AutoWorld.Data.Models.Dealership", b =>
                 {
                     b.HasOne("AutoWorld.Data.Models.Picture", "LogoPicture")
@@ -683,6 +653,13 @@ namespace AutoWorld.Data.Migrations
                     b.HasOne("AutoWorld.Data.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("AutoWorld.Data.Models.Extra", b =>
+                {
+                    b.HasOne("AutoWorld.Data.Models.Car", null)
+                        .WithMany("Extras")
+                        .HasForeignKey("CarId");
                 });
 
             modelBuilder.Entity("AutoWorld.Data.Models.Model", b =>
