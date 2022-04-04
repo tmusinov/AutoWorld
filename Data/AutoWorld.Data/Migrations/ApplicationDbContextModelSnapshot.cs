@@ -238,7 +238,30 @@ namespace AutoWorld.Data.Migrations
 
                     b.HasIndex("WatchlistId");
 
-                    b.ToTable("Cars");
+                    b.ToTable("Cars", (string)null);
+                });
+
+            modelBuilder.Entity("AutoWorld.Data.Models.CarsExtras", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CarId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ExtraId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CarId");
+
+                    b.HasIndex("ExtraId");
+
+                    b.ToTable("CarsExtras", (string)null);
                 });
 
             modelBuilder.Entity("AutoWorld.Data.Models.Color", b =>
@@ -260,7 +283,7 @@ namespace AutoWorld.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Colors");
+                    b.ToTable("Colors", (string)null);
                 });
 
             modelBuilder.Entity("AutoWorld.Data.Models.Dealership", b =>
@@ -314,7 +337,7 @@ namespace AutoWorld.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Dealerships");
+                    b.ToTable("Dealerships", (string)null);
                 });
 
             modelBuilder.Entity("AutoWorld.Data.Models.Extra", b =>
@@ -324,9 +347,6 @@ namespace AutoWorld.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int?>("CarId")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -345,11 +365,9 @@ namespace AutoWorld.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CarId");
-
                     b.HasIndex("IsDeleted");
 
-                    b.ToTable("Extras");
+                    b.ToTable("Extras", (string)null);
                 });
 
             modelBuilder.Entity("AutoWorld.Data.Models.Make", b =>
@@ -379,7 +397,7 @@ namespace AutoWorld.Data.Migrations
 
                     b.HasIndex("IsDeleted");
 
-                    b.ToTable("Makes");
+                    b.ToTable("Makes", (string)null);
                 });
 
             modelBuilder.Entity("AutoWorld.Data.Models.Model", b =>
@@ -414,7 +432,7 @@ namespace AutoWorld.Data.Migrations
 
                     b.HasIndex("MakeId");
 
-                    b.ToTable("Models");
+                    b.ToTable("Models", (string)null);
                 });
 
             modelBuilder.Entity("AutoWorld.Data.Models.Picture", b =>
@@ -449,7 +467,7 @@ namespace AutoWorld.Data.Migrations
 
                     b.HasIndex("IsDeleted");
 
-                    b.ToTable("Pictures");
+                    b.ToTable("Pictures", (string)null);
                 });
 
             modelBuilder.Entity("AutoWorld.Data.Models.Setting", b =>
@@ -482,7 +500,7 @@ namespace AutoWorld.Data.Migrations
 
                     b.HasIndex("IsDeleted");
 
-                    b.ToTable("Settings");
+                    b.ToTable("Settings", (string)null);
                 });
 
             modelBuilder.Entity("AutoWorld.Data.Models.Watchlist", b =>
@@ -511,7 +529,7 @@ namespace AutoWorld.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Watchlists");
+                    b.ToTable("Watchlists", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -661,6 +679,25 @@ namespace AutoWorld.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("AutoWorld.Data.Models.CarsExtras", b =>
+                {
+                    b.HasOne("AutoWorld.Data.Models.Car", "Car")
+                        .WithMany("Extras")
+                        .HasForeignKey("CarId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AutoWorld.Data.Models.Extra", "Extra")
+                        .WithMany("CarsExtras")
+                        .HasForeignKey("ExtraId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Car");
+
+                    b.Navigation("Extra");
+                });
+
             modelBuilder.Entity("AutoWorld.Data.Models.Dealership", b =>
                 {
                     b.HasOne("AutoWorld.Data.Models.Picture", "LogoPicture")
@@ -674,13 +711,6 @@ namespace AutoWorld.Data.Migrations
                     b.Navigation("LogoPicture");
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("AutoWorld.Data.Models.Extra", b =>
-                {
-                    b.HasOne("AutoWorld.Data.Models.Car", null)
-                        .WithMany("Extras")
-                        .HasForeignKey("CarId");
                 });
 
             modelBuilder.Entity("AutoWorld.Data.Models.Model", b =>
@@ -786,6 +816,11 @@ namespace AutoWorld.Data.Migrations
             modelBuilder.Entity("AutoWorld.Data.Models.Dealership", b =>
                 {
                     b.Navigation("Cars");
+                });
+
+            modelBuilder.Entity("AutoWorld.Data.Models.Extra", b =>
+                {
+                    b.Navigation("CarsExtras");
                 });
 
             modelBuilder.Entity("AutoWorld.Data.Models.Make", b =>

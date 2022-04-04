@@ -6,7 +6,7 @@ namespace AutoWorld.Data.Migrations
 
     using Microsoft.EntityFrameworkCore.Migrations;
 
-    public partial class InitialMigration : Migration
+    public partial class CarsExtraMappingTable : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -70,6 +70,23 @@ namespace AutoWorld.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Colors", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Extras",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Extras", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -323,26 +340,29 @@ namespace AutoWorld.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Extras",
+                name: "CarsExtras",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CarId = table.Column<int>(type: "int", nullable: true),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CarId = table.Column<int>(type: "int", nullable: false),
+                    ExtraId = table.Column<int>(type: "int", nullable: false),
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Extras", x => x.Id);
+                    table.PrimaryKey("PK_CarsExtras", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Extras_Cars_CarId",
+                        name: "FK_CarsExtras_Cars_CarId",
                         column: x => x.CarId,
                         principalTable: "Cars",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_CarsExtras_Extras_ExtraId",
+                        column: x => x.ExtraId,
+                        principalTable: "Extras",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -487,6 +507,16 @@ namespace AutoWorld.Data.Migrations
                 column: "WatchlistId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_CarsExtras_CarId",
+                table: "CarsExtras",
+                column: "CarId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CarsExtras_ExtraId",
+                table: "CarsExtras",
+                column: "ExtraId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Dealerships_IsDeleted",
                 table: "Dealerships",
                 column: "IsDeleted");
@@ -502,11 +532,6 @@ namespace AutoWorld.Data.Migrations
                 name: "IX_Dealerships_UserId",
                 table: "Dealerships",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Extras_CarId",
-                table: "Extras",
-                column: "CarId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Extras_IsDeleted",
@@ -599,13 +624,16 @@ namespace AutoWorld.Data.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Extras");
+                name: "CarsExtras");
 
             migrationBuilder.DropTable(
                 name: "Settings");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Extras");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

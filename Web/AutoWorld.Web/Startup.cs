@@ -8,6 +8,7 @@
     using AutoWorld.Data.Models;
     using AutoWorld.Data.Repositories;
     using AutoWorld.Data.Seeding;
+    using AutoWorld.Services;
     using AutoWorld.Services.Data;
     using AutoWorld.Services.Mapping;
     using AutoWorld.Services.Messaging;
@@ -69,6 +70,7 @@
             services.AddTransient<ICarsService, CarsService>();
             services.AddTransient<IMakesService, MakesService>();
             services.AddTransient<IColorsService, ColorsService>();
+            services.AddTransient<ICarsScrapperService, CarsScrapperService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
