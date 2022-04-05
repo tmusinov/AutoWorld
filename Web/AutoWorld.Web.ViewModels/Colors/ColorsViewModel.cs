@@ -1,9 +1,9 @@
-﻿namespace AutoWorld.Web.ViewModels.Home
+﻿namespace AutoWorld.Web.ViewModels.Colors
 {
     using AutoWorld.Data.Models;
     using AutoWorld.Services.Mapping;
 
-    public class MakesViewModel : IMapFrom<Make>
+    public class ColorsViewModel : IMapFrom<Color>
     {
         public string Name { get; set; }
     }
