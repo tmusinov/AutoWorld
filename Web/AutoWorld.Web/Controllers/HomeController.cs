@@ -1,6 +1,7 @@
 ﻿namespace AutoWorld.Web.Controllers
 {
     using System.Diagnostics;
+    using System.Threading.Tasks;
 
     using AutoWorld.Services;
     using AutoWorld.Services.Data;
@@ -42,8 +43,9 @@
             return this.Json(models);
         }
 
-        public IActionResult Privacy()
+        public async Task<IActionResult> Privacy()
         {
+            await this.carsScrapperService.PopulateDb(1);
             return this.View();
         }
 

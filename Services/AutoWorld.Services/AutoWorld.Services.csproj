@@ -21,6 +21,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\..\Data\AutoWorld.Data.Models\AutoWorld.Data.Models.csproj" />
+		<ProjectReference Include="..\..\Data\AutoWorld.Data\AutoWorld.Data.csproj" />
 	</ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
-
-namespace AutoWorld.Data.Migrations
+﻿namespace AutoWorld.Data.Migrations
 {
+    using Microsoft.EntityFrameworkCore.Migrations;
+
     public partial class CarsExtrasMappingTable : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -25,7 +25,7 @@ namespace AutoWorld.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CarId = table.Column<int>(nullable: false),
-                    ExtraId = table.Column<int>(nullable: false)
+                    ExtraId = table.Column<int>(nullable: false),
                 },
                 constraints: table =>
                 {
