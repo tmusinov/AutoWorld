@@ -35,17 +35,16 @@
             </div>
             <div class="col-sm-2">
                 <label class="text-required font-weight-bold">Engine type</label>
-                <select name="EngineType" class="form-control" asp-items="@Html.GetEnumSelectList<AutoWorld.Data.Models.EngineType>()">
+                <select name="EngineType" class="form-control" asp-items="Html.GetEnumSelectList<AutoWorld.Data.Models.EngineType>()">
                 </select>
             </div>
-            <div class="col-sm-2">
+            <div class="col">
                 <label class="text-required font-weight-bold">Condition</label>
-                <div class="">
-                    <input type="radio" name="used" />
-                    <label>Used</label>
-                    <input type="radio" name="ForParts" />
-                    <label>For parts</label>
-                </div>
+               <select class="form-control">
+                    <option value="used">Used</option>
+                    <option value="new">New</option>
+                    <option value="forparts">For parts</option>
+                </select>
             </div>
         </div>
 
@@ -56,17 +55,17 @@
             </div>
             <div class="col-sm-2">
                 <label>Eurostandard</label>
-                <select name="eurostandard" class="form-control" asp-items="@Html.GetEnumSelectList<AutoWorld.Data.Models.EuroStandard>()">
+                <select name="eurostandard" class="form-control" asp-items="Html.GetEnumSelectList<AutoWorld.Data.Models.EuroStandard>()">
                 </select>
             </div>
             <div class="col">
                 <label class="text-required font-weight-bold">Gearbox</label>
-                <select name="gearbox" class="form-control" asp-items="@Html.GetEnumSelectList<AutoWorld.Data.Models.Gearbox>()">
+                <select name="gearbox" class="form-control" asp-items="Html.GetEnumSelectList<AutoWorld.Data.Models.Gearbox>()">
                 </select>
             </div>
             <div class="col">
                 <label class="text-required font-weight-bold">Category</label>
-                <select name="category" class="form-control" asp-items="@Html.GetEnumSelectList<AutoWorld.Data.Models.Category>()">
+                <select name="category" class="form-control" asp-items="Html.GetEnumSelectList<AutoWorld.Data.Models.Category>()">
                 </select>
             </div>
         </div>
@@ -78,7 +77,7 @@
             </div>
             <div class="col-sm-2">
                 <label class="text-required font-weight-bold">Currency</label>
-                <select name="currency" class="form-control" asp-items="@Html.GetEnumSelectList<AutoWorld.Data.Models.Currency>()">
+                <select name="currency" class="form-control" asp-items="Html.GetEnumSelectList<AutoWorld.Data.Models.Currency>()">
                 </select>
             </div>
             <div class="col-sm-2">
@@ -110,6 +109,7 @@
             <div class="col">
                 <label>Color</label>
                 <select name="color" class="form-control">
+                    <option></option>
                     @foreach (var color in Model.Colors)
                     {
                         <option value="@color.Name">@color.Name</option>

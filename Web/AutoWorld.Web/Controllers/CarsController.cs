@@ -6,7 +6,6 @@
     using AutoWorld.Data.Models;
     using AutoWorld.Services.Data;
     using AutoWorld.Web.ViewModels.Cars;
-    using AutoWorld.Web.ViewModels.Home;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
@@ -60,7 +59,8 @@
         {
             if (!this.ModelState.IsValid)
             {
-                return this.View(input);
+                var viewModel = this.carsService.GetAllMakesAndColors();
+                return this.View(viewModel);
             }
 
             var user = await this.userManager.GetUserAsync(this.User);

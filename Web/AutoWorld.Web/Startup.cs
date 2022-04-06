@@ -71,6 +71,7 @@
             services.AddTransient<IMakesService, MakesService>();
             services.AddTransient<IColorsService, ColorsService>();
             services.AddTransient<ICarsScrapperService, CarsScrapperService>();
+            services.AddTransient<IDealershipsService, DealershipsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

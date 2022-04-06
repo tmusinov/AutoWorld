@@ -48,12 +48,12 @@
         <div class="form-row mb-3 text-left">
             <div class="col">
                 <label>Engine type</label>
-                <select name="EngineType" class="form-control" asp-items="@Html.GetEnumSelectList<AutoWorld.Data.Models.EngineType>()">
+                <select name="EngineType" class="form-control" asp-items="Html.GetEnumSelectList<AutoWorld.Data.Models.EngineType>()">
                 </select>
             </div>
             <div class="col">
                 <label>Gearbox</label>
-                <select name="gearbox" class="form-control" asp-items="@Html.GetEnumSelectList<AutoWorld.Data.Models.Gearbox>()">
+                <select name="gearbox" class="form-control" asp-items="Html.GetEnumSelectList<AutoWorld.Data.Models.Gearbox>()">
                 </select>
             </div>
         </div>
