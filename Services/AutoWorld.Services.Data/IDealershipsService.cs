@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
 
     using AutoWorld.Data.Models;
+    using AutoWorld.Web.ViewModels.Cars;
     using AutoWorld.Web.ViewModels.Dealerships;
 
     public interface IDealershipsService
@@ -13,8 +14,14 @@
 
         IEnumerable<T> GetAll<T>(int page, int itemsPerPage);
 
+        IEnumerable<CarInListViewModel> GetAllDealershipCars(int page, string dealershipId, int itemsPerPage);
+
         T GetById<T>(string id);
 
         int GetCount();
+
+        int GetDealershipsCarsCount(string dealershipId);
+
+        DealershipInfoViewModel GetDealershipInfo(string id);
     }
 }
