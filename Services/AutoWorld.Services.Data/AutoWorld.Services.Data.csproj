@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+	  <ProjectReference Include="..\..\AutoWorld.Common\AutoWorld.Common.csproj" />
     <ProjectReference Include="..\..\Data\AutoWorld.Data.Common\AutoWorld.Data.Common.csproj" />
     <ProjectReference Include="..\..\Data\AutoWorld.Data.Models\AutoWorld.Data.Models.csproj" />
 	  <ProjectReference Include="..\..\Web\AutoWorld.Web.ViewModels\AutoWorld.Web.ViewModels.csproj" />

@@ -14,7 +14,6 @@
     {
         private readonly IMakesService makesService;
         private readonly ICarsService carsService;
-        private readonly ICarsScrapperService carsScrapperService;
 
         public HomeController(IMakesService makesService, ICarsService carsService)
         {
@@ -44,7 +43,6 @@
 
         public IActionResult Privacy()
         {
-            // await this.carsScrapperService.PopulateDb(1);
             return this.View();
         }
 

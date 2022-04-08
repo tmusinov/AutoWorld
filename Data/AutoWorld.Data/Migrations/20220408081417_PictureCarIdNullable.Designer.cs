@@ -7,19 +7,22 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
+#nullable disable
+
 namespace AutoWorld.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20201112113035_InitialModelsCreate")]
-    partial class InitialModelsCreate
+    [Migration("20220408081417_PictureCarIdNullable")]
+    partial class PictureCarIdNullable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.9")
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                .HasAnnotation("ProductVersion", "6.0.3")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
+
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("AutoWorld.Data.Models.ApplicationRole", b =>
                 {
@@ -43,12 +46,12 @@ namespace AutoWorld.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
@@ -56,10 +59,10 @@ namespace AutoWorld.Data.Migrations
 
                     b.HasIndex("NormalizedName")
                         .IsUnique()
-                        .HasName("RoleNameIndex")
+                        .HasDatabaseName("RoleNameIndex")
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
-                    b.ToTable("AspNetRoles");
+                    b.ToTable("AspNetRoles", (string)null);
                 });
 
             modelBuilder.Entity("AutoWorld.Data.Models.ApplicationUser", b =>
@@ -81,8 +84,8 @@ namespace AutoWorld.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
@@ -100,12 +103,12 @@ namespace AutoWorld.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("PasswordHash")
                         .HasColumnType("nvarchar(max)");
@@ -123,38 +126,39 @@ namespace AutoWorld.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(256)")
-                        .HasMaxLength(256);
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("IsDeleted");
 
                     b.HasIndex("NormalizedEmail")
-                        .HasName("EmailIndex");
+                        .HasDatabaseName("EmailIndex");
 
                     b.HasIndex("NormalizedUserName")
                         .IsUnique()
-                        .HasName("UserNameIndex")
+                        .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("AspNetUsers");
+                    b.ToTable("AspNetUsers", (string)null);
                 });
 
             modelBuilder.Entity("AutoWorld.Data.Models.Car", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
 
-                    b.Property<int>("ColorId")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int?>("ColorId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Currency")
+                    b.Property<int?>("Currency")
                         .HasColumnType("int");
 
                     b.Property<string>("DealershipId")
@@ -166,13 +170,13 @@ namespace AutoWorld.Data.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("EngineType")
+                    b.Property<int?>("EngineType")
                         .HasColumnType("int");
 
-                    b.Property<int>("EuroStandard")
+                    b.Property<int?>("EuroStandard")
                         .HasColumnType("int");
 
-                    b.Property<int>("Gearbox")
+                    b.Property<int?>("Gearbox")
                         .HasColumnType("int");
 
                     b.Property<string>("ImageUrl")
@@ -190,7 +194,7 @@ namespace AutoWorld.Data.Migrations
                     b.Property<int>("MakeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("Mileage")
+                    b.Property<int?>("Mileage")
                         .HasColumnType("int");
 
                     b.Property<int>("ModelId")
@@ -202,16 +206,16 @@ namespace AutoWorld.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Power")
+                    b.Property<int?>("Power")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("Price")
+                    b.Property<decimal?>("Price")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Views")
+                    b.Property<int?>("Views")
                         .HasColumnType("int");
 
                     b.Property<string>("WatchlistId")
@@ -239,12 +243,36 @@ namespace AutoWorld.Data.Migrations
                     b.ToTable("Cars");
                 });
 
+            modelBuilder.Entity("AutoWorld.Data.Models.CarsExtras", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("CarId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("ExtraId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CarId");
+
+                    b.HasIndex("ExtraId");
+
+                    b.ToTable("CarsExtras");
+                });
+
             modelBuilder.Entity("AutoWorld.Data.Models.Color", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -318,11 +346,9 @@ namespace AutoWorld.Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("CarId")
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -339,12 +365,7 @@ namespace AutoWorld.Data.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Type")
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("CarId");
 
                     b.HasIndex("IsDeleted");
 
@@ -355,8 +376,9 @@ namespace AutoWorld.Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -384,8 +406,9 @@ namespace AutoWorld.Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -419,7 +442,7 @@ namespace AutoWorld.Data.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("CarId")
+                    b.Property<int?>("CarId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedOn")
@@ -440,6 +463,9 @@ namespace AutoWorld.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("RemotePictureUrl")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("CarId");
@@ -453,8 +479,9 @@ namespace AutoWorld.Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -514,8 +541,9 @@ namespace AutoWorld.Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -531,15 +559,16 @@ namespace AutoWorld.Data.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetRoleClaims");
+                    b.ToTable("AspNetRoleClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("ClaimType")
                         .HasColumnType("nvarchar(max)");
@@ -555,7 +584,7 @@ namespace AutoWorld.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserClaims");
+                    b.ToTable("AspNetUserClaims", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
@@ -577,7 +606,7 @@ namespace AutoWorld.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AspNetUserLogins");
+                    b.ToTable("AspNetUserLogins", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<string>", b =>
@@ -592,7 +621,7 @@ namespace AutoWorld.Data.Migrations
 
                     b.HasIndex("RoleId");
 
-                    b.ToTable("AspNetUserRoles");
+                    b.ToTable("AspNetUserRoles", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -611,16 +640,14 @@ namespace AutoWorld.Data.Migrations
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
-                    b.ToTable("AspNetUserTokens");
+                    b.ToTable("AspNetUserTokens", (string)null);
                 });
 
             modelBuilder.Entity("AutoWorld.Data.Models.Car", b =>
                 {
                     b.HasOne("AutoWorld.Data.Models.Color", "Color")
                         .WithMany()
-                        .HasForeignKey("ColorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("ColorId");
 
                     b.HasOne("AutoWorld.Data.Models.Dealership", null)
                         .WithMany("Cars")
@@ -645,6 +672,33 @@ namespace AutoWorld.Data.Migrations
                     b.HasOne("AutoWorld.Data.Models.Watchlist", null)
                         .WithMany("Cars")
                         .HasForeignKey("WatchlistId");
+
+                    b.Navigation("Color");
+
+                    b.Navigation("Make");
+
+                    b.Navigation("Model");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("AutoWorld.Data.Models.CarsExtras", b =>
+                {
+                    b.HasOne("AutoWorld.Data.Models.Car", "Car")
+                        .WithMany("Extras")
+                        .HasForeignKey("CarId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("AutoWorld.Data.Models.Extra", "Extra")
+                        .WithMany("CarsExtras")
+                        .HasForeignKey("ExtraId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Car");
+
+                    b.Navigation("Extra");
                 });
 
             modelBuilder.Entity("AutoWorld.Data.Models.Dealership", b =>
@@ -656,13 +710,10 @@ namespace AutoWorld.Data.Migrations
                     b.HasOne("AutoWorld.Data.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
-                });
 
-            modelBuilder.Entity("AutoWorld.Data.Models.Extra", b =>
-                {
-                    b.HasOne("AutoWorld.Data.Models.Car", null)
-                        .WithMany("Extras")
-                        .HasForeignKey("CarId");
+                    b.Navigation("LogoPicture");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("AutoWorld.Data.Models.Model", b =>
@@ -672,15 +723,17 @@ namespace AutoWorld.Data.Migrations
                         .HasForeignKey("MakeId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.Navigation("Make");
                 });
 
             modelBuilder.Entity("AutoWorld.Data.Models.Picture", b =>
                 {
                     b.HasOne("AutoWorld.Data.Models.Car", "Car")
                         .WithMany("Pictures")
-                        .HasForeignKey("CarId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("CarId");
+
+                    b.Navigation("Car");
                 });
 
             modelBuilder.Entity("AutoWorld.Data.Models.Watchlist", b =>
@@ -688,6 +741,8 @@ namespace AutoWorld.Data.Migrations
                     b.HasOne("AutoWorld.Data.Models.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -739,6 +794,49 @@ namespace AutoWorld.Data.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("AutoWorld.Data.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("Cars");
+
+                    b.Navigation("Claims");
+
+                    b.Navigation("Logins");
+
+                    b.Navigation("Roles");
+                });
+
+            modelBuilder.Entity("AutoWorld.Data.Models.Car", b =>
+                {
+                    b.Navigation("Extras");
+
+                    b.Navigation("Pictures");
+                });
+
+            modelBuilder.Entity("AutoWorld.Data.Models.Dealership", b =>
+                {
+                    b.Navigation("Cars");
+                });
+
+            modelBuilder.Entity("AutoWorld.Data.Models.Extra", b =>
+                {
+                    b.Navigation("CarsExtras");
+                });
+
+            modelBuilder.Entity("AutoWorld.Data.Models.Make", b =>
+                {
+                    b.Navigation("Models");
+                });
+
+            modelBuilder.Entity("AutoWorld.Data.Models.Picture", b =>
+                {
+                    b.Navigation("Dealership");
+                });
+
+            modelBuilder.Entity("AutoWorld.Data.Models.Watchlist", b =>
+                {
+                    b.Navigation("Cars");
                 });
 #pragma warning restore 612, 618
         }
