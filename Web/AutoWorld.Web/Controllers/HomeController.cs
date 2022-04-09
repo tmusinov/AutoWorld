@@ -1,10 +1,10 @@
 ﻿namespace AutoWorld.Web.Controllers
 {
     using System.Diagnostics;
+using System.Linq;
     using System.Threading.Tasks;
 
     using AutoWorld.Data.Models;
-    using AutoWorld.Services;
     using AutoWorld.Services.Data;
     using AutoWorld.Web.ViewModels;
     using AutoWorld.Web.ViewModels.Cars;
@@ -39,8 +39,8 @@
             return this.View(viewModel);
         }
 
-        [HttpPost]
-        public IActionResult Index(CarsSearchInputModel car, int id = 1)
+        [HttpGet]
+        public IActionResult Search(CarsSearchInputModel car, int id = 1)
         {
             if (id <= 0)
             {
@@ -48,15 +48,23 @@
             }
 
             const int ItemsPerPage = 12;
-            var viewModel = new CarsListViewModel
+            var result = this.carsService.SearchCars<CarInListViewModel>(car, id, ItemsPerPage);
+
+            var viewModel = new CarsSearchInputModel
             {
                 ItemsPerPage = ItemsPerPage,
                 PageNumber = id,
-                CarsCount = this.carsService.GetCount(),
-                Cars = this.carsService.SearchCars<CarInListViewModel>(car, id, ItemsPerPage),
+                CarsCount = result.Count,
+                Cars = result.Cars,
+                Make = car.Make,
+                Model = car.Model,
+                Year = car.Year,
+                Price = car.Price,
+                EngineType = car.EngineType,
+                Gearbox = car.Gearbox,
             };
 
-            return this.View("/Views/Cars/All.cshtml", viewModel);
+            return this.View(viewModel);
         }
 
         [HttpGet]
@@ -79,13 +87,6 @@
                 Cars = await this.usersService.GetAll(id, ItemsPerPage, user.Id),
             };
             return this.View(viewModel);
-        }
-
-        [Authorize]
-        public IActionResult Id(int id)
-        {
-            var car = this.carsService.GetById<SingleCarViewModel>(id);
-            return this.View(car);
         }
 
         public IActionResult Ajax(string makeName)
@@ -126,7 +127,7 @@
             }
 
             await this.carsService.Update(input);
-            return this.Redirect("/Home/MyCars");
+            return this.Redirect(nameof(this.MyCars));
         }
 
         [HttpPost]

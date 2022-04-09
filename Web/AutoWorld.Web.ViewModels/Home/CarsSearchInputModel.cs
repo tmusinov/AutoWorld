@@ -1,9 +1,14 @@
 ﻿namespace AutoWorld.Web.ViewModels.Home
 {
-    using AutoWorld.Data.Models;
+    using System.Collections.Generic;
 
-    public class CarsSearchInputModel
+    using AutoWorld.Data.Models;
+    using AutoWorld.Web.ViewModels.Cars;
+
+    public class CarsSearchInputModel : PagingViewModel
     {
+        public IEnumerable<CarInListViewModel> Cars { get; set; }
+
         public string Make { get; set; }
 
         public string Model { get; set; }

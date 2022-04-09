@@ -1,47 +1,12 @@
-﻿@model AutoWorld.Web.ViewModels.Dealerships.SingleDealershipViewModel
+﻿@model AutoWorld.Web.Views.Home.CarsSearchInputModel
 @using AutoWorld.Common
+@using AutoWorld.Data.Models
 @{
-    this.ViewData["Title"] = Model.DealershipInfo.Name;
+    this.ViewData["Title"] = "Result Cars, page " + Model.PageNumber;
 }
 
 <div class="container col-6 justify-content-center">
-    <div class="row">
-        <div>
-            <img src="@Model.DealershipInfo.LogoPicture" class="mr-3 img-responsive d-block" alt="@Model.DealershipInfo.Name">
-        </div>
-        <div class="col">
-            <h5>
-                @Model.DealershipInfo.Name
-            </h5>
-            <div>
-                <span>@Model.DealershipInfo.Location</span>
-            </div>
-            <div>
-                <span>@Model.DealershipInfo.PhoneNumber</span>
-            </div>
-            <span>
-                Dealership in AutoWorld since
-                @Model.DealershipInfo.CreatedOn.ToString("d")
-            </span>
-        </div>
-        @*<div>
-            <ul class="item-rating">
-                @for (int i = 1; i <= 5; i++)
-                {
-                    if (i <= Math.Round(@Model.AverageVote, MidpointRounding.ToEven))
-                    {
-                        <li class="star star-fill" data-vote="@i"><i class="fas fa-star"></i></li>
-                    }
-                    else
-                    {
-                        <li class="star star-empty" data-vote="@i"><i class="fas fa-star"></i></li>
-                    }
-                }
-                <li><span id="averageVoteValue">@Model.AverageVote.ToString("0.0")</span><span> / 5</span> </li>
-            </ul>
-        </div>*@
-    </div>
-    @foreach (var car in Model.DealershipCars)
+    @foreach (var car in Model.Cars)
     {
         <hr class="bg-primary" />
         <div class="grad pb-2">
@@ -49,15 +14,14 @@
                 <i class="ml-3">
                     @car.CreatedOn.ToString("M")
                 </i>
-                
             </div>
             <div class="row">
-                <a asp-controller="Cars" asp-action="Id" asp-route-id="@car.Id" class="ml-4">
+                <a class="ml-4" asp-action="Id" asp-route-id="@car.Id">
                     <img src="@car.PictureUrl" class="mr-3 img-responsive d-block img-thumbnail carItem" alt="@car.MakeName @car.ModelName">
                 </a>
                 <div class="col">
                     <h5>
-                        <a asp-controller="Cars" asp-action="Id" asp-route-id="@car.Id">
+                        <a asp-action="Id" asp-route-id="@car.Id">
                             @car.CarTitle
                         </a>
                         @if (this.User.Identity.IsAuthenticated)
@@ -86,18 +50,29 @@
     }
 </div>
 <hr />
-@*<partial name="_PagingPartial" model="@Model" />*@
 
 <nav aria-label="...">
     <ul class="pagination justify-content-center">
         <li class="page-item @if (!Model.HasPreviousPage) { <text>disabled</text> }">
-            <a class="page-link" asp-route-id="@Model.DealershipInfo.UserId" asp-route-page="@Model.PreviousPageNumber">Previous</a>
+            <a class="page-link" asp-controller="Home" asp-action="Search" asp-route-id="@Model.PreviousPageNumber"
+               asp-route-make="@Model.Make"
+               asp-route-model="@Model.Model"
+               asp-route-year="@Model.Year"
+               asp-route-price="@Model.Price"
+               asp-route-enginetype="@Model.EngineType">Previous</a>
         </li>
         @for (int i = Model.PageNumber - 4; i < Model.PageNumber; i++)
         {
             if (i > 0)
             {
-                <li class="page-item"><a class="page-link" asp-route-id="@Model.DealershipInfo.UserId" asp-route-page="@i">@i</a></li>
+                <li class="page-item">
+                    <a class="page-link" asp-controller="Home" asp-action="Search" asp-route-id="@i"
+                       asp-route-make="@Model.Make"
+                       asp-route-model="@Model.Model"
+                       asp-route-year="@Model.Year"
+                       asp-route-price="@Model.Price"
+                       asp-route-enginetype="@Model.EngineType">@i</a>
+                </li>
             }
         }
         <li class="page-item active" aria-current="page">
@@ -110,11 +85,25 @@
         {
             if (i <= Model.PagesCount)
             {
-                <li class="page-item"><a class="page-link" asp-route-id="@Model.DealershipInfo.UserId" asp-route-page="@i">@i</a></li>
+                <li class="page-item">
+                    <a class="page-link" asp-controller="Home" asp-action="Search" asp-route-id="@i"
+                       asp-route-make="@Model.Make"
+                       asp-route-model="@Model.Model"
+                       asp-route-year="@Model.Year"
+                       asp-route-price="@Model.Price"
+                       asp-route-enginetype="@Model.EngineType">@i</a>
+                </li>
             }
         }
         <li class="page-item @if (!Model.HasNextPage) { <text>disabled</text> }">
-            <a class="page-link" asp-route-id="@Model.DealershipInfo.UserId" asp-route-page="@Model.NextPageNumber">Next</a>
+            <a class="page-link"
+               asp-controller="Home" asp-action="Search" asp-route-id="@Model.NextPageNumber"
+               asp-route-make="@Model.Make"
+               asp-route-model="@Model.Model"
+               asp-route-year="@Model.Year"
+               asp-route-price="@Model.Price"
+               asp-route-enginetype="@Model.EngineType"
+               asp-route-gearbox="@Model.Gearbox">Next</a>
         </li>
     </ul>
 </nav>
