@@ -1,0 +1,20 @@
+﻿namespace AutoWorld.Services.Data
+{
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
+
+    using AutoWorld.Web.ViewModels.Cars;
+
+    public interface IWatchlistsService
+    {
+        Task Add(int id, string userId);
+
+        Task Remove(int id, string userId);
+
+        int GetCount(string userId);
+
+        bool IsInWatchlist(int id, string userId);
+
+        Task<IEnumerable<CarInListViewModel>> GetAll(int page, int itemsPerPage, string userId);
+    }
+}

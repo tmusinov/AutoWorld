@@ -34,7 +34,7 @@
                     opt.MapFrom(x =>
                         x.ImageUrl != null ?
                         x.ImageUrl :
-                       "/images/cars/" + x.Pictures.OrderBy(x => x.CreatedOn).FirstOrDefault().Id + "." + x.Pictures.OrderBy(x => x.CreatedOn).FirstOrDefault().Extension));
+                        "/images/cars/" + x.Pictures.OrderBy(x => x.CreatedOn).FirstOrDefault().Id + "." + x.Pictures.OrderBy(x => x.CreatedOn).FirstOrDefault().Extension));
         }
     }
 }
