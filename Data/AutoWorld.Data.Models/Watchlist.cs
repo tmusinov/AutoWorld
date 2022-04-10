@@ -1,7 +1,6 @@
 ﻿namespace AutoWorld.Data.Models
 {
     using System;
-    using System.Collections.Generic;
 
     using AutoWorld.Data.Common.Models;
 

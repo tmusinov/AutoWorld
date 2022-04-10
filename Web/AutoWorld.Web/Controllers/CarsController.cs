@@ -1,15 +1,19 @@
 ﻿namespace AutoWorld.Web.Controllers
 {
     using System;
+    using System.Text;
     using System.Threading.Tasks;
 
     using AutoWorld.Data.Models;
     using AutoWorld.Services.Data;
+    using AutoWorld.Services.Messaging;
     using AutoWorld.Web.ViewModels.Cars;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using SendGrid;
+    using SendGrid.Helpers.Mail;
 
     public class CarsController : BaseController
     {
@@ -17,15 +21,18 @@
         private readonly ICarsService carsService;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IWebHostEnvironment environment;
+        private readonly IEmailSender emailSender;
 
         public CarsController(
             ICarsService carsService,
             UserManager<ApplicationUser> userManager,
-            IWebHostEnvironment environment)
+            IWebHostEnvironment environment,
+            IEmailSender emailSender)
         {
             this.carsService = carsService;
             this.userManager = userManager;
             this.environment = environment;
+            this.emailSender = emailSender;
         }
 
         [HttpGet]
@@ -88,6 +95,22 @@
         {
             var car = this.carsService.GetById(id);
             return this.View(car);
+        }
+
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> SendToEmail(int id)
+        {
+            var user = await this.userManager.GetUserAsync(this.User);
+            var car = this.carsService.GetById<CarInListViewModel>(id);
+
+            var html = new StringBuilder();
+            html.AppendLine($"<h1>{car.MakeName} {car.ModelName}</h1>");
+            html.AppendLine($"<h3>{car.Modification}</h3>");
+            html.AppendLine($"<img src=\"{car.PictureUrl}\" />");
+            await this.emailSender.SendEmailAsync("auto@autoworld.com", "AutoWorld", user.Email, car.MakeName, html.ToString());
+
+            return this.RedirectToAction(nameof(this.Id), new { id });
         }
     }
 }
