@@ -4,6 +4,7 @@
     using System.Text;
     using System.Threading.Tasks;
 
+    using AutoWorld.Common;
     using AutoWorld.Data.Models;
     using AutoWorld.Services.Data;
     using AutoWorld.Services.Messaging;
@@ -111,7 +112,7 @@
             html.AppendLine($"<h1>{car.MakeName} {car.ModelName}</h1>");
             html.AppendLine($"<h3>{car.Modification}</h3>");
             html.AppendLine($"<img src=\"{car.PictureUrl}\" />");
-            await this.emailSender.SendEmailAsync("autoworlddev@abv.bg", "AutoWorld", user.Email, car.MakeName, html.ToString());
+            await this.emailSender.SendEmailAsync(GlobalConstants.SendGridSender, "AutoWorld", user.Email, car.MakeName, html.ToString());
 
             return this.RedirectToAction(nameof(this.Id), new { id });
         }

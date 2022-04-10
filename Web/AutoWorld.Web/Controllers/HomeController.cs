@@ -127,7 +127,7 @@ using System.Linq;
             }
 
             await this.carsService.Update(input);
-            return this.Redirect(nameof(this.MyCars));
+            return this.Redirect("/Home/MyCars");
         }
 
         [HttpPost]
