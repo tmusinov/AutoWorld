@@ -12,27 +12,28 @@
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using SendGrid;
-    using SendGrid.Helpers.Mail;
+    using Microsoft.Extensions.Configuration;
 
     public class CarsController : BaseController
     {
-        private readonly IMakesService makesService;
         private readonly ICarsService carsService;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly IWebHostEnvironment environment;
         private readonly IEmailSender emailSender;
+        private readonly IConfiguration configuration;
 
         public CarsController(
             ICarsService carsService,
             UserManager<ApplicationUser> userManager,
             IWebHostEnvironment environment,
-            IEmailSender emailSender)
+            IEmailSender emailSender,
+            IConfiguration configuration)
         {
             this.carsService = carsService;
             this.userManager = userManager;
             this.environment = environment;
             this.emailSender = emailSender;
+            this.configuration = configuration;
         }
 
         [HttpGet]
@@ -55,6 +56,7 @@
                 CarsCount = this.carsService.GetCount(),
                 Cars = await this.carsService.GetAll(id, userId, ItemsPerPage),
             };
+
             return this.View(viewModel);
         }
 
@@ -93,6 +95,7 @@
 
         public IActionResult Id(int id)
         {
+            this.ViewData["MapApiKey"] = this.configuration["MapToken:ApiKey"];
             var car = this.carsService.GetById(id);
             return this.View(car);
         }
@@ -108,7 +111,7 @@
             html.AppendLine($"<h1>{car.MakeName} {car.ModelName}</h1>");
             html.AppendLine($"<h3>{car.Modification}</h3>");
             html.AppendLine($"<img src=\"{car.PictureUrl}\" />");
-            await this.emailSender.SendEmailAsync("auto@autoworld.com", "AutoWorld", user.Email, car.MakeName, html.ToString());
+            await this.emailSender.SendEmailAsync("autoworlddev@abv.bg", "AutoWorld", user.Email, car.MakeName, html.ToString());
 
             return this.RedirectToAction(nameof(this.Id), new { id });
         }
