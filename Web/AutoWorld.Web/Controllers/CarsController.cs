@@ -1,6 +1,7 @@
 ﻿namespace AutoWorld.Web.Controllers
 {
     using System;
+    using System.Linq;
     using System.Text;
     using System.Threading.Tasks;
 
@@ -106,12 +107,12 @@
         public async Task<IActionResult> SendToEmail(int id)
         {
             var user = await this.userManager.GetUserAsync(this.User);
-            var car = this.carsService.GetById<CarInListViewModel>(id);
+            var car = this.carsService.GetById(id);
 
             var html = new StringBuilder();
             html.AppendLine($"<h1>{car.MakeName} {car.ModelName}</h1>");
             html.AppendLine($"<h3>{car.Modification}</h3>");
-            html.AppendLine($"<img src=\"{car.PictureUrl}\" />");
+            html.AppendLine($"<img src=\"{"/images/cars/" + car.PictureUrls.FirstOrDefault()}\">");
             await this.emailSender.SendEmailAsync(GlobalConstants.SendGridSender, "AutoWorld", user.Email, car.MakeName, html.ToString());
 
             return this.RedirectToAction(nameof(this.Id), new { id });
