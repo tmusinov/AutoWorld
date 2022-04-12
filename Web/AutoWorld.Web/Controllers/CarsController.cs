@@ -117,5 +117,11 @@
 
             return this.RedirectToAction(nameof(this.Id), new { id });
         }
+        [HttpGet]
+        public async Task<IActionResult> IncreaseViews(int id)
+        {
+            var views = await this.carsService.IncreaseViews(id);
+            return this.Ok(views);
+        }
     }
 }
