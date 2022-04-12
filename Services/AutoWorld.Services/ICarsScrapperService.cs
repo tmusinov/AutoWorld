@@ -1,9 +1,9 @@
 ﻿namespace AutoWorld.Services
 {
-    using System.Threading.Tasks;
+    using System.Collections.Concurrent;
 
     public interface ICarsScrapperService
     {
-        Task PopulateDb(int pagesCount);
+        ConcurrentBag<RawPropery> PopulateDb(int pagesCount);
     }
 }

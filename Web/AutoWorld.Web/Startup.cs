@@ -13,7 +13,7 @@
     using AutoWorld.Services.Mapping;
     using AutoWorld.Services.Messaging;
     using AutoWorld.Web.ViewModels;
-
+    using AutoWorldML.Model;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
@@ -22,6 +22,7 @@
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using Microsoft.Extensions.ML;
 
     public class Startup
     {
@@ -67,6 +68,9 @@
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
             services.AddScoped<IDbQueryRunner, DbQueryRunner>();
 
+            // ML Service
+            services.AddPredictionEnginePool<ModelInput, ModelOutput>().FromFile("C:\\Users\\tero7\\Desktop\\AutoWorldNET6\\AutoWorld\\Web\\AutoWorld.Web\\MLModels\\MLModel.zip");
+
             // Application services
             services.AddTransient<IEmailSender>(x => new SendGridEmailSender(this.configuration["SendGrid:ApiKey"]));
             services.AddTransient<ISettingsService, SettingsService>();
@@ -79,6 +83,7 @@
             services.AddTransient<IWatchlistsService, WatchlistsService>();
             services.AddTransient<IUsersService, UsersService>();
             services.AddTransient<IVotesService, VotesService>();
+            services.AddTransient<IMLService, MLService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.32126.317
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.32228.343
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Web", "Web", "{E389DEB6-5F90-444B-A054-12A10D39C76F}"
 EndProject
@@ -38,6 +38,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoWorld.Web.Tests", "Tests\AutoWorld.Web.Tests\AutoWorld.Web.Tests.csproj", "{3EE06C6E-C8F3-418A-A309-8AC81976A074}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoWorld.Web.ViewModels", "Web\AutoWorld.Web.ViewModels\AutoWorld.Web.ViewModels.csproj", "{13B7AACB-9C85-4409-8D4B-95A67D0DFFF7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoWorldML.Model", "Web\AutoWorldML.Model\AutoWorldML.Model.csproj", "{2C4AE8E7-C547-44ED-9A49-3607ED2F00BE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AutoWorldML.ConsoleApp", "Web\AutoWorldML.ConsoleApp\AutoWorldML.ConsoleApp.csproj", "{9CCAE2D5-1AFB-49BA-8955-F92822DAB93E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -101,6 +105,14 @@ Global
 		{13B7AACB-9C85-4409-8D4B-95A67D0DFFF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13B7AACB-9C85-4409-8D4B-95A67D0DFFF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13B7AACB-9C85-4409-8D4B-95A67D0DFFF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C4AE8E7-C547-44ED-9A49-3607ED2F00BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C4AE8E7-C547-44ED-9A49-3607ED2F00BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C4AE8E7-C547-44ED-9A49-3607ED2F00BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C4AE8E7-C547-44ED-9A49-3607ED2F00BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9CCAE2D5-1AFB-49BA-8955-F92822DAB93E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9CCAE2D5-1AFB-49BA-8955-F92822DAB93E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9CCAE2D5-1AFB-49BA-8955-F92822DAB93E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9CCAE2D5-1AFB-49BA-8955-F92822DAB93E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
