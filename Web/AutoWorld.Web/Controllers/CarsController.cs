@@ -39,7 +39,7 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> All(string order, int id = 1)
+        public async Task<IActionResult> All(string order = "Make/Model/Price", int id = 1)
         {
             if (id <= 0)
             {
@@ -93,7 +93,7 @@
                 return this.View(input);
             }
 
-            return this.Redirect("/");
+            return this.Redirect("/Home/MyCars");
         }
 
         public IActionResult Id(int id)
@@ -118,6 +118,7 @@
 
             return this.RedirectToAction(nameof(this.Id), new { id });
         }
+
         [HttpGet]
         public async Task<IActionResult> IncreaseViews(int id)
         {

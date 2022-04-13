@@ -35,7 +35,11 @@ using System.Linq;
         [HttpGet]
         public IActionResult Index()
         {
-            var viewModel = this.makesService.GetAllNames<MakesViewModel>();
+            var viewModel = new HomeViewModel
+            {
+                Data = this.makesService.GetAllNames<MakesViewModel>(),
+                Cars = this.carsService.GetNewest(),
+            };
             return this.View(viewModel);
         }
 
@@ -140,7 +144,8 @@ using System.Linq;
         [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
-            await this.carsService.Delete(id);
+            var user = await this.userManager.GetUserAsync(this.User);
+            await this.carsService.Delete(id, user.Id);
             return this.Redirect("/Home/MyCars");
         }
 

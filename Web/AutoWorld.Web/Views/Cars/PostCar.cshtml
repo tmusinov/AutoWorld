@@ -7,7 +7,7 @@
 
 <div class="form container">
     
-    <form method="post" id="deleteForm" class="text-center border border-light p-5" enctype="multipart/form-data">
+    <form method="post" id="submitForm" class="text-center border border-light p-5" enctype="multipart/form-data">
         <h5 class="card-header info-color white-text text-center py-4">
             <strong>Post Car</strong>
         </h5>
@@ -154,7 +154,7 @@
                 </div>
                 <div class="form-row mt-2">
                     <label class="text-primary">All colored in <b>blue</b> are required!</label>
-                    <button class="btn btn-info my-4 btn-block" id="submitBtn" type="submit">Post</button>
+                    <a class="btn btn-info my-4 btn-block" id="submitBtn">Post</a>
                 </div>
             </div>
         </div>
@@ -165,11 +165,11 @@
         <div class="modal-content">
             <div class="modal-body">
                 <h4>Info.</h4>
-                <p>AutoWorld suggests price for vihicle with those parameter around <span class="text-primary" id="price"></span>
+                <p>AutoWorld suggests price for vehicle with those parameters around <span class="text-primary" id="price"></span>BGN
                 </p>
             </div>
             <div class="modal-footer">
-                <button type="button" id="btnYes" class="btn btn-danger" disabled onclick="deleteForm.submit()">I'll set the price</button>
+                <button type="button" id="btnYes" class="btn btn-danger" disabled onclick="submitForm.submit()">I'll set the price</button>
                 <button type="button" id="btnNo" class="btn btn-secondary" disabled data-dismiss="modal">Back</button>
             </div>
         </div>
@@ -200,7 +200,8 @@
                         let no = document.getElementById('btnNo');
                         yes.disabled = false;
                         no.disabled = false;
-                        price.textContent = data;
+                        price.textContent = Number.parseFloat(data).toFixed();
+                        $('#MLInfoModal').modal();
                     },
                     contentType: 'application/json',
                 });

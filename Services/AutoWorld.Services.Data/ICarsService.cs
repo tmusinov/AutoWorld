@@ -12,11 +12,11 @@
 
         IEnumerable<CarInListViewModel> GetAll(int page, string userId, string order, int itemsPerPage);
 
+        IEnumerable<CarInListViewModel> GetNewest();
+
         (IEnumerable<CarInListViewModel> Cars, int Count) SearchCars(CarsSearchInputModel car, string userId, int page, int itemsPerPage);
 
         int GetCount();
-
-        T GetById<T>(int id);
 
         SingleCarViewModel GetById(int id);
 
@@ -24,7 +24,7 @@
 
         Task Update(CarEditViewModel car);
 
-        Task Delete(int id);
+        Task Delete(int id, string userId);
 
         Task<int> IncreaseViews(int carId);
     }

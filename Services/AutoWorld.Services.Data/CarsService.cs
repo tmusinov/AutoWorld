@@ -108,25 +108,25 @@
         public IEnumerable<CarInListViewModel> GetAll(int page, string userId, string order, int itemsPerPage = 12)
         {
             var query = this.carRepository.AllAsNoTracking()
-                 .Select(x => new CarInListViewModel
-                 {
-                     Id = x.Id,
-                     IsInWatchlist = userId == string.Empty ? false : this.watchlistRepository.All().Any(d => d.UserId == userId && d.CarId == x.Id),
-                     MakeName = x.Make.Name,
-                     ModelName = x.Model.Name,
-                     Modification = x.Modification,
-                     Year = x.Year,
-                     Location = x.Location,
-                     Mileage = (int)x.Mileage,
-                     ColorName = x.Color.Name,
-                     UserPhoneNumber = x.User.PhoneNumber,
-                     Currency = x.Currency.ToString(),
-                     CreatedOn = x.CreatedOn,
-                     Price = (decimal)x.Price,
-                     PriceOrder = x.Currency == Currency.EUR ? ((decimal)x.Price * 1.96M) : x.Currency == Currency.USD ? ((decimal)x.Price * 1.80M) : (decimal)x.Price,
-                     Description = x.Description,
-                     PictureUrl = x.ImageUrl != null ? x.ImageUrl : "/images/cars/" + x.Pictures.OrderBy(x => x.CreatedOn).FirstOrDefault().Id + "." + x.Pictures.OrderBy(x => x.CreatedOn).FirstOrDefault().Extension,
-                 })
+                .Select(x => new CarInListViewModel
+                {
+                    Id = x.Id,
+                    IsInWatchlist = userId == string.Empty ? false : this.watchlistRepository.All().Any(d => d.UserId == userId && d.CarId == x.Id),
+                    MakeName = x.Make.Name,
+                    ModelName = x.Model.Name,
+                    Modification = x.Modification,
+                    Year = x.Year,
+                    Location = x.Location,
+                    Mileage = (int)x.Mileage,
+                    ColorName = x.Color.Name,
+                    UserPhoneNumber = x.User.PhoneNumber,
+                    Currency = x.Currency.ToString(),
+                    CreatedOn = x.CreatedOn,
+                    Price = (decimal)x.Price,
+                    PriceOrder = x.Currency == Currency.EUR ? ((decimal)x.Price * 1.96M) : x.Currency == Currency.USD ? ((decimal)x.Price * 1.61M) : (decimal)x.Price,
+                    Description = x.Description,
+                    PictureUrl = x.ImageUrl != null ? x.ImageUrl : "/images/cars/" + x.Pictures.OrderBy(x => x.CreatedOn).FirstOrDefault().Id + "." + x.Pictures.OrderBy(x => x.CreatedOn).FirstOrDefault().Extension,
+                })
                 .AsQueryable();
 
             var orderModel = new CarsSearchInputModel { Order = order };
@@ -145,13 +145,27 @@
             return model;
         }
 
-        public T GetById<T>(int id)
+        public IEnumerable<CarInListViewModel> GetNewest()
         {
-            var car = this.carRepository.AllAsNoTracking()
-                .Where(x => x.Id == id)
-                .To<T>().FirstOrDefault();
+            var query = this.carRepository.AllAsNoTracking()
+                .Select(x => new CarInListViewModel
+                {
+                    Id = x.Id,
+                    MakeName = x.Make.Name,
+                    ModelName = x.Model.Name,
+                    Modification = x.Modification,
+                    Location = x.Location,
+                    Mileage = (int)x.Mileage,
+                    Currency = x.Currency.ToString(),
+                    CreatedOn = x.CreatedOn,
+                    Price = (decimal)x.Price,
+                    PictureUrl = x.ImageUrl != null ? x.ImageUrl : "/images/cars/" + x.Pictures.OrderBy(x => x.CreatedOn).FirstOrDefault().Id + "." + x.Pictures.OrderBy(x => x.CreatedOn).FirstOrDefault().Extension,
+                })
+                .OrderByDescending(x => x.CreatedOn)
+                .Take(8)
+                .AsQueryable();
 
-            return car;
+            return query.ToList();
         }
 
         public SingleCarViewModel GetById(int id)
@@ -234,6 +248,7 @@
                     PictureUrl = x.ImageUrl != null ? x.ImageUrl : "/images/cars/" + x.Pictures.OrderBy(x => x.CreatedOn).FirstOrDefault().Id + "." + x.Pictures.OrderBy(x => x.CreatedOn).FirstOrDefault().Extension,
                 })
                 .AsQueryable();
+
             query = this.commonService.Filter(query, car, page, itemsPerPage);
 
             return (query.Take(itemsPerPage).ToList(), query.ToList().Count);
@@ -260,7 +275,7 @@
 
             car.MakeId = make.Id;
             car.ModelId = modelId;
-            car.ColorId = colorId;
+            car.ColorId = colorId > 0 ? colorId : null;
             car.Price = input.Price;
             car.EngineType = input.EngineType;
             car.Gearbox = input.Gearbox;
@@ -275,11 +290,14 @@
             await this.carRepository.SaveChangesAsync();
         }
 
-        public async Task Delete(int id)
+        public async Task Delete(int id, string userId)
         {
-            var car = this.carRepository.All().FirstOrDefault(x => x.Id == id);
-            this.carRepository.Delete(car);
-            await this.carRepository.SaveChangesAsync();
+            var car = this.carRepository.All().FirstOrDefault(x => x.Id == id && x.UserId == userId);
+            if (car != null)
+            {
+                this.carRepository.Delete(car);
+                await this.carRepository.SaveChangesAsync();
+            }
         }
 
         public async Task<int> IncreaseViews(int carId)
