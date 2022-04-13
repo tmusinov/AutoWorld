@@ -12,6 +12,7 @@
     using AutoWorld.Services.Mapping;
     using AutoWorld.Web.ViewModels.Cars;
     using AutoWorld.Web.ViewModels.Dealerships;
+    using AutoWorld.Web.ViewModels.Home;
     using Microsoft.EntityFrameworkCore;
 
     public class DealershipsService : IDealershipsService
@@ -22,17 +23,20 @@
         private readonly IDeletableEntityRepository<Car> carsRepository;
         private readonly IDeletableEntityRepository<ApplicationUser> usersRepository;
         private readonly IRepository<Watchlist> watchlistRepository;
+        private readonly ICommonService commonService;
 
         public DealershipsService(
             IDeletableEntityRepository<Dealership> dealershipRepository,
             IDeletableEntityRepository<Car> carsRepository,
             IDeletableEntityRepository<ApplicationUser> usersRepository,
-            IRepository<Watchlist> watchlistRepository)
+            IRepository<Watchlist> watchlistRepository,
+            ICommonService commonService)
         {
             this.dealershipRepository = dealershipRepository;
             this.carsRepository = carsRepository;
             this.usersRepository = usersRepository;
             this.watchlistRepository = watchlistRepository;
+            this.commonService = commonService;
         }
 
         public async Task<bool> CreateDealershipAsync(CreateDealershipInputModel input, ApplicationUser user, string picturePath)
@@ -50,7 +54,7 @@
                 UserId = user.Id,
             };
 
-            // /wwwroot/images/cars/jhdsi-343g3h453-=g34g.jpg
+            // /wwwroot/images/dealerships/jhdsi-343g3h453-=g34g.jpg
             Directory.CreateDirectory($"{picturePath}/dealerships/");
             var extension = Path.GetExtension(input.LogoPicture.FileName).TrimStart('.');
             if (!this.allowedExtensions.Any(x => extension.EndsWith(x)))
@@ -88,10 +92,10 @@
             return dealerships;
         }
 
-        public async Task<IEnumerable<CarInListViewModel>> GetAllDealershipCars(int page, string dealershipId, string userId, int itemsPerPage)
+        public IEnumerable<CarInListViewModel> GetAllDealershipCars(int page, string dealershipId, string userId, string order, int itemsPerPage)
         {
             var dbCar = this.carsRepository.AllAsNoTracking().Where(x => x.UserId == dealershipId);
-            var dealershipsCars = await dbCar
+            var query = dbCar
                 .Select(x => new CarInListViewModel
                 {
                     Id = x.Id,
@@ -106,25 +110,16 @@
                     UserPhoneNumber = x.User.PhoneNumber,
                     CreatedOn = x.CreatedOn,
                     Price = (decimal)x.Price,
+                    PriceOrder = x.Currency == Currency.EUR ? ((decimal)x.Price * 1.96M) : x.Currency == Currency.USD ? ((decimal)x.Price * 1.80M) : (decimal)x.Price,
                     Currency = x.Currency.ToString(),
                     Description = x.Description,
                     PictureUrl = x.ImageUrl != null ? x.ImageUrl : "/images/cars/" + x.Pictures.OrderBy(x => x.CreatedOn).FirstOrDefault().Id + "." + x.Pictures.OrderBy(x => x.CreatedOn).FirstOrDefault().Extension,
                 })
-                .OrderByDescending(x => x.CreatedOn)
-                .Skip((page - 1) * itemsPerPage)
-                .Take(itemsPerPage)
-                .ToListAsync();
+                .AsQueryable();
 
-            return dealershipsCars;
-        }
-
-        public T GetById<T>(string id)
-        {
-            var dealership = this.dealershipRepository.AllAsNoTracking()
-                .Where(x => x.Id == id)
-                .To<T>().FirstOrDefault();
-
-            return dealership;
+            var orderModel = new CarsSearchInputModel { Order = order };
+            query = this.commonService.Filter(query, orderModel, page, itemsPerPage);
+            return query.Take(itemsPerPage).ToList();
         }
 
         public int GetCount()
@@ -167,7 +162,7 @@
 
         public int GetDealershipsCarsCount(string id)
         {
-            return this.usersRepository.AllAsNoTracking().Where(x => x.Id == id).Select(x => x.Cars).FirstOrDefault().Count;
+            return this.usersRepository.AllAsNoTracking().Where(x => x.Id == id).Select(x => x.Cars).FirstOrDefault().Count();
         }
     }
 }
