@@ -118,7 +118,7 @@
                 Category = Category.Hatchback,
                 Price = 500,
                 Currency = Currency.BGN,
-                Month = "Feb",
+                Month = 2,
                 Year = 1988,
                 Mileage = 150000,
                 IsVIP = false,
@@ -197,7 +197,7 @@
                 Category = Category.Hatchback,
                 Price = 500,
                 Currency = Currency.BGN,
-                Month = "Feb",
+                Month = 2,
                 Year = 1988,
                 Mileage = 150000,
                 IsVIP = false,
@@ -510,7 +510,7 @@
             Assert.Equal(this.date, car.CreatedOn);
             Assert.Equal("krg", car.Location);
             Assert.Equal("desc", car.Description);
-            Assert.Equal("1988", car.Year);
+            Assert.Equal(1988, car.Year);
             Assert.Equal("BGN", car.Currency.ToString());
             Assert.Equal("Gasoline", car.EngineType.ToString());
             Assert.Equal("Euro_3", car.EuroStandard.ToString());
@@ -587,7 +587,7 @@
             Assert.Equal(this.date, car.CreatedOn);
             Assert.Equal("krg", car.Location);
             Assert.Equal("desc", car.Description);
-            Assert.Equal("1988", car.Year);
+            Assert.Equal(1988, car.Year);
             Assert.Equal("BGN", car.Currency.ToString());
             Assert.Equal("Gasoline", car.EngineType.ToString());
             Assert.Equal("Euro_3", car.EuroStandard.ToString());

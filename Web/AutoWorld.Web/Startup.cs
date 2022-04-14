@@ -91,7 +91,7 @@
             services.AddScoped<IDbQueryRunner, DbQueryRunner>();
 
             // ML Service
-            services.AddPredictionEnginePool<ModelInput, ModelOutput>().FromFile("C:\\Users\\tero7\\Desktop\\AutoWorldNET6\\AutoWorld\\Web\\AutoWorld.Web\\MLModels\\MLModel.zip");
+            services.AddPredictionEnginePool<ModelInput, ModelOutput>().FromFile("MLModels/MLModel.zip");
 
             // Application services
             services.AddTransient<IEmailSender>(x => new SendGridEmailSender(this.configuration["SendGrid:ApiKey"]));

@@ -28,8 +28,6 @@
 
         public EuroStandard EuroStandard { get; set; }
 
-        public int EuroStandart { get; set; }
-
         [Required]
         [Range(1, 3)]
         public Gearbox Gearbox { get; set; }
@@ -47,9 +45,10 @@
         public Currency Currency { get; set; }
 
         [Required]
-        public string Month { get; set; }
+        public byte Month { get; set; }
 
         // [CurrentYearMaxValue(1930)]
+        [Required]
         public int Year { get; set; }
 
         [Required]
@@ -66,6 +65,8 @@
         public bool IsVIP { get; set; }
 
         public string Description { get; set; }
+
+        public Condition Condition { get; set; }
 
         public IEnumerable<int> Extras { get; set; }
     }

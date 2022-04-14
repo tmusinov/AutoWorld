@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AutoWorld.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20220408081417_PictureCarIdNullable")]
-    partial class PictureCarIdNullable
+    [Migration("20220414142540_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -152,13 +152,19 @@ namespace AutoWorld.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("Category")
+                        .HasColumnType("int");
+
                     b.Property<int?>("ColorId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Condition")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("Currency")
+                    b.Property<int>("Currency")
                         .HasColumnType("int");
 
                     b.Property<string>("DealershipId")
@@ -170,13 +176,13 @@ namespace AutoWorld.Data.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("EngineType")
+                    b.Property<int>("EngineType")
                         .HasColumnType("int");
 
-                    b.Property<int?>("EuroStandard")
+                    b.Property<int>("EuroStandard")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Gearbox")
+                    b.Property<int>("Gearbox")
                         .HasColumnType("int");
 
                     b.Property<string>("ImageUrl")
@@ -194,7 +200,7 @@ namespace AutoWorld.Data.Migrations
                     b.Property<int>("MakeId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("Mileage")
+                    b.Property<int>("Mileage")
                         .HasColumnType("int");
 
                     b.Property<int>("ModelId")
@@ -206,23 +212,23 @@ namespace AutoWorld.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<byte>("Month")
+                        .HasColumnType("tinyint");
+
                     b.Property<int?>("Power")
                         .HasColumnType("int");
 
-                    b.Property<decimal?>("Price")
+                    b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("UserId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int?>("Views")
+                    b.Property<int>("Views")
                         .HasColumnType("int");
 
-                    b.Property<string>("WatchlistId")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Year")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Year")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -237,8 +243,6 @@ namespace AutoWorld.Data.Migrations
                     b.HasIndex("ModelId");
 
                     b.HasIndex("UserId");
-
-                    b.HasIndex("WatchlistId");
 
                     b.ToTable("Cars");
                 });
@@ -286,6 +290,40 @@ namespace AutoWorld.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Colors");
+                });
+
+            modelBuilder.Entity("AutoWorld.Data.Models.ContactFormEntry", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Content")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Ip")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ContactFormEntries");
                 });
 
             modelBuilder.Entity("AutoWorld.Data.Models.Dealership", b =>
@@ -508,10 +546,45 @@ namespace AutoWorld.Data.Migrations
                     b.ToTable("Settings");
                 });
 
+            modelBuilder.Entity("AutoWorld.Data.Models.Vote", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("DealershipId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<byte>("Value")
+                        .HasColumnType("tinyint");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DealershipId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Votes");
+                });
+
             modelBuilder.Entity("AutoWorld.Data.Models.Watchlist", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("CarId")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -529,6 +602,8 @@ namespace AutoWorld.Data.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CarId");
 
                     b.HasIndex("IsDeleted");
 
@@ -669,10 +744,6 @@ namespace AutoWorld.Data.Migrations
                         .WithMany("Cars")
                         .HasForeignKey("UserId");
 
-                    b.HasOne("AutoWorld.Data.Models.Watchlist", null)
-                        .WithMany("Cars")
-                        .HasForeignKey("WatchlistId");
-
                     b.Navigation("Color");
 
                     b.Navigation("Make");
@@ -736,11 +807,34 @@ namespace AutoWorld.Data.Migrations
                     b.Navigation("Car");
                 });
 
+            modelBuilder.Entity("AutoWorld.Data.Models.Vote", b =>
+                {
+                    b.HasOne("AutoWorld.Data.Models.Dealership", "Dealership")
+                        .WithMany("Votes")
+                        .HasForeignKey("DealershipId");
+
+                    b.HasOne("AutoWorld.Data.Models.ApplicationUser", "User")
+                        .WithMany("Votes")
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Dealership");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("AutoWorld.Data.Models.Watchlist", b =>
                 {
+                    b.HasOne("AutoWorld.Data.Models.Car", "Car")
+                        .WithMany("Watchlists")
+                        .HasForeignKey("CarId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("AutoWorld.Data.Models.ApplicationUser", "User")
-                        .WithMany()
+                        .WithMany("Watchlists")
                         .HasForeignKey("UserId");
+
+                    b.Navigation("Car");
 
                     b.Navigation("User");
                 });
@@ -805,6 +899,10 @@ namespace AutoWorld.Data.Migrations
                     b.Navigation("Logins");
 
                     b.Navigation("Roles");
+
+                    b.Navigation("Votes");
+
+                    b.Navigation("Watchlists");
                 });
 
             modelBuilder.Entity("AutoWorld.Data.Models.Car", b =>
@@ -812,11 +910,15 @@ namespace AutoWorld.Data.Migrations
                     b.Navigation("Extras");
 
                     b.Navigation("Pictures");
+
+                    b.Navigation("Watchlists");
                 });
 
             modelBuilder.Entity("AutoWorld.Data.Models.Dealership", b =>
                 {
                     b.Navigation("Cars");
+
+                    b.Navigation("Votes");
                 });
 
             modelBuilder.Entity("AutoWorld.Data.Models.Extra", b =>
@@ -832,11 +934,6 @@ namespace AutoWorld.Data.Migrations
             modelBuilder.Entity("AutoWorld.Data.Models.Picture", b =>
                 {
                     b.Navigation("Dealership");
-                });
-
-            modelBuilder.Entity("AutoWorld.Data.Models.Watchlist", b =>
-                {
-                    b.Navigation("Cars");
                 });
 #pragma warning restore 612, 618
         }

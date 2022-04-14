@@ -6,7 +6,7 @@ namespace AutoWorld.Data.Migrations
 
     using Microsoft.EntityFrameworkCore.Migrations;
 
-    public partial class InitialCreate : Migration
+    public partial class InitialMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -70,6 +70,25 @@ namespace AutoWorld.Data.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Colors", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ContactFormEntries",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Content = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Ip = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ContactFormEntries", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -231,27 +250,6 @@ namespace AutoWorld.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Watchlists",
-                columns: table => new
-                {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Watchlists", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Watchlists_AspNetUsers_UserId",
-                        column: x => x.UserId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Models",
                 columns: table => new
                 {
@@ -286,21 +284,23 @@ namespace AutoWorld.Data.Migrations
                     ModelId = table.Column<int>(type: "int", nullable: false),
                     ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Modification = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    EngineType = table.Column<int>(type: "int", nullable: true),
-                    Gearbox = table.Column<int>(type: "int", nullable: true),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    EngineType = table.Column<int>(type: "int", nullable: false),
+                    Gearbox = table.Column<int>(type: "int", nullable: false),
                     Power = table.Column<int>(type: "int", nullable: true),
-                    Year = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Mileage = table.Column<int>(type: "int", nullable: true),
-                    Views = table.Column<int>(type: "int", nullable: true),
+                    Year = table.Column<int>(type: "int", nullable: false),
+                    Month = table.Column<byte>(type: "tinyint", nullable: false),
+                    Mileage = table.Column<int>(type: "int", nullable: false),
+                    Views = table.Column<int>(type: "int", nullable: false),
                     IsVIP = table.Column<bool>(type: "bit", nullable: false),
                     ColorId = table.Column<int>(type: "int", nullable: true),
-                    EuroStandard = table.Column<int>(type: "int", nullable: true),
-                    Currency = table.Column<int>(type: "int", nullable: true),
+                    EuroStandard = table.Column<int>(type: "int", nullable: false),
+                    Currency = table.Column<int>(type: "int", nullable: false),
                     Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Category = table.Column<int>(type: "int", nullable: false),
+                    Condition = table.Column<int>(type: "int", nullable: false),
                     DealershipId = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    WatchlistId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
@@ -331,11 +331,6 @@ namespace AutoWorld.Data.Migrations
                         principalTable: "Models",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Cars_Watchlists_WatchlistId",
-                        column: x => x.WatchlistId,
-                        principalTable: "Watchlists",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -371,7 +366,7 @@ namespace AutoWorld.Data.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Extension = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RemotePictureUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CarId = table.Column<int>(type: "int", nullable: false),
+                    CarId = table.Column<int>(type: "int", nullable: true),
                     DealerId = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
@@ -383,6 +378,33 @@ namespace AutoWorld.Data.Migrations
                     table.PrimaryKey("PK_Pictures", x => x.Id);
                     table.ForeignKey(
                         name: "FK_Pictures_Cars_CarId",
+                        column: x => x.CarId,
+                        principalTable: "Cars",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Watchlists",
+                columns: table => new
+                {
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    CarId = table.Column<int>(type: "int", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Watchlists", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Watchlists_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Watchlists_Cars_CarId",
                         column: x => x.CarId,
                         principalTable: "Cars",
                         principalColumn: "Id",
@@ -419,6 +441,33 @@ namespace AutoWorld.Data.Migrations
                         name: "FK_Dealerships_Pictures_LogoPictureId",
                         column: x => x.LogoPictureId,
                         principalTable: "Pictures",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Votes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DealershipId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Value = table.Column<byte>(type: "tinyint", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Votes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Votes_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Votes_Dealerships_DealershipId",
+                        column: x => x.DealershipId,
+                        principalTable: "Dealerships",
                         principalColumn: "Id");
                 });
 
@@ -502,11 +551,6 @@ namespace AutoWorld.Data.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Cars_WatchlistId",
-                table: "Cars",
-                column: "WatchlistId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_CarsExtras_CarId",
                 table: "CarsExtras",
                 column: "CarId");
@@ -569,6 +613,21 @@ namespace AutoWorld.Data.Migrations
                 column: "IsDeleted");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Votes_DealershipId",
+                table: "Votes",
+                column: "DealershipId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Votes_UserId",
+                table: "Votes",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Watchlists_CarId",
+                table: "Watchlists",
+                column: "CarId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Watchlists_IsDeleted",
                 table: "Watchlists",
                 column: "IsDeleted");
@@ -597,10 +656,6 @@ namespace AutoWorld.Data.Migrations
                 table: "Dealerships");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Watchlists_AspNetUsers_UserId",
-                table: "Watchlists");
-
-            migrationBuilder.DropForeignKey(
                 name: "FK_Cars_Colors_ColorId",
                 table: "Cars");
 
@@ -627,7 +682,16 @@ namespace AutoWorld.Data.Migrations
                 name: "CarsExtras");
 
             migrationBuilder.DropTable(
+                name: "ContactFormEntries");
+
+            migrationBuilder.DropTable(
                 name: "Settings");
+
+            migrationBuilder.DropTable(
+                name: "Votes");
+
+            migrationBuilder.DropTable(
+                name: "Watchlists");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -652,9 +716,6 @@ namespace AutoWorld.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "Models");
-
-            migrationBuilder.DropTable(
-                name: "Watchlists");
 
             migrationBuilder.DropTable(
                 name: "Makes");
