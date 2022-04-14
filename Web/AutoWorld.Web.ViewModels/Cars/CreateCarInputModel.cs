@@ -66,5 +66,7 @@
         public bool IsVIP { get; set; }
 
         public string Description { get; set; }
+
+        public IEnumerable<int> Extras { get; set; }
     }
 }

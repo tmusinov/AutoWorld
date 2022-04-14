@@ -7,6 +7,7 @@
     using AutoWorld.Data.Models;
     using AutoWorld.Services.Mapping;
     using AutoWorld.Web.ViewModels.Colors;
+    using AutoWorld.Web.ViewModels.Extras;
     using AutoWorld.Web.ViewModels.Home;
     using Microsoft.AspNetCore.Http;
 
@@ -16,6 +17,8 @@
         public IEnumerable<MakesViewModel> Makes { get; set; }
 
         public IEnumerable<ColorsViewModel> Colors { get; set; }
+
+        public IEnumerable<ExtrasViewModel> Extras { get; set; }
 
         [Required]
         public string Make { get; set; }
