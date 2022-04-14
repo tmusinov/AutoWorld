@@ -7,26 +7,28 @@
 
     public class DeleteUserCars : IDeleteUserCars
     {
-        private readonly IDeletableEntityRepository<ApplicationUser> usersRepository;
+        private readonly IDeletableEntityRepository<Car> carsRepository;
 
-        public DeleteUserCars(IDeletableEntityRepository<ApplicationUser> usersRepository)
+        public DeleteUserCars(IDeletableEntityRepository<Car> carsRepository)
         {
-            this.usersRepository = usersRepository;
+            this.carsRepository = carsRepository;
         }
 
         public async Task DeleteCars()
         {
-            // TODO: Delete cars after their validity expires.
-            //var cars = this.usersRepository.All().Select(x => x.Cars).FirstOrDefault();
-
-            //foreach (var user in users)
-            //{
-            //    var cars = user.Cars;
-            //}
-
-            //var car = cars.FirstOrDefault();
-            //car.Price = 999;
-            //await this.usersRepository.SaveChangesAsync();
+            var cars = this.carsRepository.All();
+            foreach (var car in cars)
+            {
+                if (car.Validity == 0)
+                {
+                    this.carsRepository.Delete(car);
+                }
+                else
+                {
+                    car.Validity--;
+                }
+            }
+            await this.carsRepository.SaveChangesAsync();
         }
     }
 }
